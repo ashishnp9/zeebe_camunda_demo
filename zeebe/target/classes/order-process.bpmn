@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0sasgk3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.7.0">
+  <bpmn:process id="order-process" name="Order Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Order Placed">
+      <bpmn:outgoing>SequenceFlow_0gl9hbm</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_1w81reb" name="Order delivered">
+      <bpmn:incoming>SequenceFlow_12c4ko9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="collect-money-task1" name="Collect Money">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="collect-money" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0gl9hbm</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0at4mty</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0gl9hbm" sourceRef="StartEvent_1" targetRef="collect-money-task1" />
+    <bpmn:serviceTask id="fetch-items-task1" name="Fetch Items">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="fetch-items" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0at4mty</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_13fydy0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0at4mty" sourceRef="collect-money-task1" targetRef="fetch-items-task1" />
+    <bpmn:serviceTask id="ship-parcel-task1" name="Ship Parcel">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ship-parcel" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_13fydy0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_12c4ko9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_13fydy0" sourceRef="fetch-items-task1" targetRef="ship-parcel-task1" />
+    <bpmn:sequenceFlow id="SequenceFlow_12c4ko9" sourceRef="ship-parcel-task1" targetRef="EndEvent_1w81reb" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="order-process">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="172" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="55" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1w81reb_di" bpmnElement="EndEvent_1w81reb">
+        <dc:Bounds x="1052" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1032" y="55" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_04mza3j_di" bpmnElement="collect-money-task1">
+        <dc:Bounds x="330" y="57" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gl9hbm_di" bpmnElement="SequenceFlow_0gl9hbm">
+        <di:waypoint x="208" y="97" />
+        <di:waypoint x="330" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_16nw1o6_di" bpmnElement="fetch-items-task1">
+        <dc:Bounds x="560" y="57" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0at4mty_di" bpmnElement="SequenceFlow_0at4mty">
+        <di:waypoint x="430" y="97" />
+        <di:waypoint x="560" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1hl895y_di" bpmnElement="ship-parcel-task1">
+        <dc:Bounds x="780" y="57" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_13fydy0_di" bpmnElement="SequenceFlow_13fydy0">
+        <di:waypoint x="660" y="97" />
+        <di:waypoint x="780" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_12c4ko9_di" bpmnElement="SequenceFlow_12c4ko9">
+        <di:waypoint x="880" y="97" />
+        <di:waypoint x="1052" y="97" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
